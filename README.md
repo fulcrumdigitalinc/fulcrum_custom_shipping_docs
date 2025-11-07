@@ -227,6 +227,6 @@ Response:
 ---
 
 ## Support
-- **Email:** info@fulcrumdigital.com
+- **Email:** customer.support@fulcrumdigital.com
 
 © 2025 Fulcrum Digital. Adobe, Adobe Commerce, and Magento are trademarks of Adobe Inc.
