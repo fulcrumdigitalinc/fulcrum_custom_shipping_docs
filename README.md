@@ -11,7 +11,7 @@ For more details on the extensibility framework, see the [Adobe Commerce Checkou
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
-- [Install Adobe Commerce Modules (PaaS only)](#install-adobe-commerce-modules-paas-only)
+- [Install the require modules to configure the shipping extensions (PaaS Only)](#install-the-require-modules-to-configure-the-shipping-extensions-paas-only) 
 - [Create an App Builder Project](#create-an-app-builder-project)
 - [Initialize the Project](#initialize-the-project)
 - [Environment Variables](#environment-variables)
@@ -45,7 +45,7 @@ npm install -g @adobe/aio-cli
 ```
 - Access to the [Adobe Developer Console](https://console.adobe.io/) with an App Builder license.
 
-### Install Adobe Commerce Modules (PaaS only)
+### Install the require modules to configure the shipping extensions (PaaS Only)
 ```bash
 composer require magento/module-out-of-process-shipping-methods --with-dependencies
 ```
@@ -227,6 +227,6 @@ Response:
 ---
 
 ## Support
-- **Email:** customer.support@fulcrumdigital.com
+- **Email:** info@fulcrumdigital.com
 
 © 2025 Fulcrum Digital. Adobe, Adobe Commerce, and Magento are trademarks of Adobe Inc.
