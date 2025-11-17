@@ -5,20 +5,21 @@ Welcome to **Fulcrum Custom Shipping** (`fulcrum_custom_shipping`), a custom **O
 This project implements a **carrier grid** powered by **Adobe App Builder** and **Commerce Webhooks**, without installing modules in the Magento backend. It provides a configurable shipping method managed through the **Admin UI** and consumed by the **Checkout Starter Kit** or a custom Storefront.
 
 For more details on the extensibility framework, see the [Adobe Commerce Checkout Starter Kit docs](https://developer.adobe.com/commerce/extensibility/starter-kit/checkout/).
+You can download the <a href="https://docs.google.com/document/d/1rrvvXR9E-XeHFnKwxMwG-y_zwaCshOMrmH4D9_HcqRg/edit?usp=sharing" target="_blank">USER GUIDE</a>
+Or the <a href="https://docs.google.com/document/d/1auF_ueMR5jAqGKTSOknEOorKmBvLELc3Pk2f__5a_XU/edit?usp=sharing" target="_blank">DETAILED DESCRIPTION GUIDE</a>
 
 ---
 
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
-- [Install the require modules to configure the shipping extensions (PaaS Only)](#install-the-require-modules-to-configure-the-shipping-extensions-paas-only) 
+- [Install the require modules to configure the shipping extensions (PaaS Only)](#install-the-require-modules-to-configure-the-shipping-extensions-paas-only
 - [Create an App Builder Project](#create-an-app-builder-project)
 - [Initialize the Project](#initialize-the-project)
 - [Environment Variables](#environment-variables)
 - [Architecture](#architecture)
 - [Carrier Grid Configuration](#carrier-grid-configuration)
 - [Webhooks](#webhooks)
-- [Eventing](#eventing)
 - [Deploy](#deploy)
 - [Actions](#actions)
   - [`add-carrier`](#add-carrier)
@@ -73,23 +74,70 @@ XXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
 ### Create Webhooks
-After deploying actions, create the required webhooks:
-- `collect-taxes` → `plugin.magento.out_of_process_tax_management.api.oop_tax_collection.collect_taxes`
+After deploying actions, create the required webhooks (Admin/System/Webhook subscription):
+- `get_rates` → `plugin.out_of_process_shipping_methods.api.shipping_rate_repository.get_rates`
+- `type` → `after`
 
 ---
+### Carriers Grid
+<img width="2456" height="720" alt="image" src="https://github.com/user-attachments/assets/6f5a17a4-307d-422a-97df-c763d830f654" />
 
-## Eventing
-Configure event provider:
-```bash
-npm run configure-events
-```
-Update `.env` with:
-```env
-COMMERCE_ADOBE_IO_EVENTS_MERCHANT_ID=
-COMMERCE_ADOBE_IO_EVENTS_ENVIRONMENT_ID=
-```
 
----
+### Add Carrier
+<img width="645" height="696" alt="image" src="https://github.com/user-attachments/assets/01a39481-eadf-41b5-a42f-edad0bdbe350" />
+
+
+### Edit Carrier
+<img width="645" height="696" alt="image" src="https://github.com/user-attachments/assets/6d5dbd7c-bc76-4c60-85de-dcf99711ba05" />
+
+
+### Checkout
+<img width="759" height="902" alt="image" src="https://github.com/user-attachments/assets/3afa537f-cf85-443e-a2f2-359a73870b42" />
+
+
+# PaaS Compatibility & Authentication Modes
+
+Adobe Commerce PaaS requires support for both IMS authentication and Commerce
+Integration OAuth1.0a. This app automatically selects the correct
+authentication method based on available environment variables.
+
+Runtime actions such as `shipping-methods` use `lib/adobe-auth.js` and
+`lib/adobe-commerce.js` to choose between:
+
+## Option 1 — IMS Authentication (OAuth2)
+Recommended for SaaS and supported on PaaS when IMS is enabled.
+
+Required variables:
+- OAUTH_CLIENT_ID  
+- OAUTH_CLIENT_SECRETS  
+- OAUTH_TECHNICAL_ACCOUNT_ID  
+- OAUTH_TECHNICAL_ACCOUNT_EMAIL  
+- OAUTH_IMS_ORG_ID  
+- OAUTH_SCOPES  
+
+IMS setup for PaaS:  
+https://developer.adobe.com/commerce/extensibility/starter-kit/checkout/connect/#adobe-identity-management-service-ims
+
+## Option 2 — Commerce Integration (OAuth1.0a) — REQUIRED FOR PaaS
+For PaaS without IMS, create an Integration in Commerce Admin:
+
+System → Integrations → Add New
+
+Map credentials:
+- COMMERCE_CONSUMER_KEY  
+- COMMERCE_CONSUMER_SECRET  
+- COMMERCE_ACCESS_TOKEN  
+- COMMERCE_ACCESS_TOKEN_SECRET  
+
+When these variables are present, runtime actions authenticate using OAuth1.0a.
+
+## Authentication Selection Logic
+The app chooses auth mode automatically:
+
+1. If `COMMERCE_CONSUMER_*` variables exist → use OAuth1.0a  
+2. Else if `OAUTH_*` variables exist → use IMS OAuth2  
+
+This ensures full SaaS + PaaS compatibility.
 
 ## Actions
 
